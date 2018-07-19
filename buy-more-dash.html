@@ -27,9 +27,9 @@
   
     <div class="container">
         <div class="header">
-            <div class="header-logo">
+            <div class="header-logo" id="header">
                   <a href="javascript: history.go(-1)"><img alt="image" class="img-responsive back-arrow" src="images/back_arrow.png"></a>
-                <h4>Buy Dash With Cash</h4>
+                <!--<h4>Buy Dash With Cash</h4>-->
                 <a href="#"><img alt="" class="img-responsive d-logo" src="images/"></a>
             </div>
                 <a href="buy-dash-with-cash_with-sign-out.html"><button type="button" class="btn btn-d1" style="color: var(--primary-color);">BUY MORE DASH!</button></a>
@@ -121,6 +121,22 @@
       });
 
       $(document).ready(function () {
+
+          var Crypto_name = localStorage.getItem("Crypto");
+          var test = localStorage.getItem("CryptoDetails");
+          var json = JSON.parse(test);
+
+          if(Crypto_name == null){
+              $('#header').append('<h4>WOC</h4>');
+          }
+          else
+          {
+              for (var i = 0; i < json.length; i++) {
+                  if (Crypto_name == json[i].code) {
+                      $('#header').append('<h4>' + json[i].name + '</h4>');
+                  }
+              }
+          }
 
           var phone = localStorage.getItem("phone");
           $("#test").append("+1"+phone);

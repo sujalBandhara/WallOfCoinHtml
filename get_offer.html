@@ -29,20 +29,20 @@
   <body>
   <div class="container">
       <div class="header">
-          <div class="header-logo">
+          <div class="header-logo" id="header">
                 <a href="javascript: history.go(-1)" id="history-back"><img alt="image" class="img-responsive back-arrow" src="images/back_arrow.png"></a>
-            <h4>Buy Dash With Cash</h4>
+            <!--<h4>Buy Dash With Cash</h4>-->
           </div>
           <div class="content">
               <p><strong>I'm looking to spend</strong></p>
-              <div class="input-group">
+              <div class="input-group" id="amount_div">
                   <span class="input-group-addon">$</span>
                   <input type="text" class="form-control" placeholder="price" id="amount" name="amount">
                     <input type="hidden" id="publisherId" placeholder=" " name="publisherId" class="input" value="52"/>
               </div>
-              <p>To acquire Dash (D)
+              <!--<p>To acquire Dash (D)
                   (1,000,000 dots = 1 DASH)    
-              </p>
+              </p>-->
               <button type="button" class="btn" id="OfferBtn" name="OfferBtn">GET OFFERS</button>
               <button type="button" class="btn hidden" id="discoveryBtn" name="discoveryBtn">GET OFFERS</button>
         </div>
@@ -70,6 +70,32 @@
 
       $(document).ready(function () {
 
+          var Crypto_name = localStorage.getItem("Crypto");
+          var test = localStorage.getItem("CryptoDetails");
+          var json = JSON.parse(test);
+
+          if(Crypto_name == null){
+              $('#header').append('<h4>WOC</h4>');
+          }
+          else
+          {
+              for (var i = 0; i < json.length; i++) {
+                  if (Crypto_name == json[i].code) {
+                      $('#header').append('<h4>' + json[i].name + '</h4>');
+                  }
+              }
+          }
+
+          /*$('#header').append('<h4>' + Crypto_name + '</h4>');*/
+
+          var test = localStorage.getItem("CryptoDetails");
+          var currency = JSON.parse(test);
+          for(var i = 0; i < currency.length; i++) {
+              if(currency[i].code == Crypto_name) {
+                  $('<p>To acquire '+currency[i].name+' ('+currency[i].symbol+') (1,000,000 '+currency[i].minorName+' = 1 '+currency[i].code+')</p>').insertAfter('#amount_div');
+              }
+          }
+
           $('#OfferBtn').on('click',function () {
               var amount = $('#amount').val();
 
@@ -81,22 +107,11 @@
               }
               else
               {
+                  localStorage.setItem('amount',amount);
                   $('#discoveryBtn').trigger('click');
               }
           })
       })
-
-      /*$("#history-back").on('click',function (){
-          //alert("test");
-          //window.history.back();
-          history.back();
-          //document.location.replace(document.referrer);
-      });
-*/
-      /*$(function() {
-          $("#history-back").on("click",window.history.back);
-      });*/
-
 
     </script>
 </html>

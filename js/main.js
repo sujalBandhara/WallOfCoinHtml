@@ -16,12 +16,12 @@
     var object = JSON.parse(obj);
     console.log("before delete = "+object);*/
 
-    //object.splice(3, 1);
+    //object.splice(1, 1);
 
-    //console.log("after delete = "+object);
-    //localStorage.setItem("test",JSON.stringify(object));
-    //var test = localStorage.getItem("test");
-    //console.log("test"+test);
+    /*console.log("after delete = "+object);
+    localStorage.setItem("test",JSON.stringify(object));
+    var test = localStorage.getItem("test");
+    console.log("test"+test);*/
 
     /*code end here*/
 
@@ -41,7 +41,10 @@
     localStorage.removeItem("recentDeviceName");
     localStorage.removeItem("Response");
     localStorage.removeItem("test");
-    localStorage.removeItem("signInNumber");*/
+    localStorage.removeItem("signInNumber");
+    localStorage.removeItem("Crypto");
+    localStorage.removeItem("CryptoDetails");
+    localStorage.removeItem('amount');*/
 
     /*function getCrypto() {
         return ($('#crypto').is(':checked')?'DASH':'BTC');
@@ -49,21 +52,46 @@
 
     function displayOption(options) {
 
-        for(var i=0;i<options.length;i++) {
+        var cryptoCurrency = localStorage.getItem("CryptoDetails");
+        var currency = JSON.parse(cryptoCurrency);
 
-            var address = options[i].address;
+        for(var j = 0; j < currency.length; j++) {
 
-            if(address != '')
-            {
-                /*$('<div class="content" style="margin-top: 0px;"><div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src='+options[i].bankLogo+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>D '+options[i].amount.DASH+'</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate('+i+','+options.length+');">ORDER</button><input type="hidden" id="offerId_'+i+'" name="offerId_'+i+'" value="'+options[i].id+'"></small></a></p><p style="margin: 0px; text-align: left;">(d '+options[i].amount.dots+')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+options[i].bankName+'</span></a></p><small class="pull-right">Pay $'+options[i].deposit.amount+'</small><p style="margin: 0px; text-align: left;">'+options[i].address+'</p></div></div></div></div></div>').insertAfter("h5");*/
+            for (var i = 0; i < options.length; i++) {
 
-                $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src='+options[i].bankLogo+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>D '+options[i].amount.DASH+'</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate('+i+','+options.length+');">ORDER</button><input type="hidden" id="offerId_'+i+'" name="offerId_'+i+'" value="'+options[i].id+'"></small></a></p><p style="margin: 0px; text-align: left;">(d '+options[i].amount.dots+')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+options[i].bankName+'</span></a></p><small class="pull-right">Pay $'+options[i].deposit.amount+'</small><p style="margin: 0px; text-align: left;">'+options[i].address+'</p></div></div></div></div></div>');
-            }
-            else
-            {
-                /*$('<div class="content" style="margin-top: 0px;"><div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src='+options[i].bankLogo+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>D '+options[i].amount.DASH+'</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate('+i+','+options.length+');">ORDER</button><input type="hidden" id="offerId_'+i+'" name="offerId_'+i+'" value="'+options[i].id+'"></small></a></p><p style="margin: 0px; text-align: left;">(d '+options[i].amount.dots+')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+options[i].bankName+'</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $'+options[i].deposit.amount+'</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  '+'<a class="pull-right" href="'+options[i].bankLocationUrl+'">Check Location'+'</a></p></div></div></div></div></div>').insertAfter("h5");*/
+                var address = options[i].address;
 
-                $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src='+options[i].bankLogo+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>D '+options[i].amount.DASH+'</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate('+i+','+options.length+');">ORDER</button><input type="hidden" id="offerId_'+i+'" name="offerId_'+i+'" value="'+options[i].id+'"></small></a></p><p style="margin: 0px; text-align: left;">(d '+options[i].amount.dots+')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+options[i].bankName+'</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $'+options[i].deposit.amount+'</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  '+'<a class="pull-right" href="'+options[i].bankLocationUrl+'">Check Location'+'</a></p></div></div></div></div></div>');
+                if(options[i].crypto == currency[j].code) {
+
+                    if (options[i].crypto == 'DASH') {
+
+                        if (address != '') {
+
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span></a></p><small class="pull-right">Pay $' + options[i].deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + options[i].address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + options[i].deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + options[i].bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (options[i].crypto == 'PIVX'){
+
+                        if (address != '') {
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span></a></p><small class="pull-right">Pay $' + options[i].deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + options[i].address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + options[i].deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + options[i].bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (options[i].crypto == 'BTC'){
+
+                        if (address != '') {
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span></a></p><small class="pull-right">Pay $' + options[i].deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + options[i].address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#offer_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + options[i].bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + options[i].amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + options.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + options[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + options[i].amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + options[i].bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + options[i].deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + options[i].bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                }
             }
         }
     }
@@ -72,6 +100,15 @@
         $('#banks').html('<option value="">Select Payment Center</option>');
         for(var i=0;i<options.length;i++){
             $('#banks').append('<option value="'+options[i].id+'">'+options[i].name+'</option>');
+        }
+    }
+
+    function displayCryptoOptions(options) {
+
+        for(var i=0;i<options.length;i++){
+            $('#crypto').append('<option value="'+options[i].code+'">'+options[i].symbol+' '+options[i].name+'</option>');
+            //$('#crypto').append('<option value="'+options[i].code+'"><span class="fa-fa circle">'+options[i].symbol+'</span>'+options[i].name+'</option>');
+
         }
     }
 
@@ -93,6 +130,8 @@
             var latitude = localStorage.getItem("latitude");
             var longitude = localStorage.getItem("longitude");
 
+            var cryptoCurrency = localStorage.getItem("Crypto");
+
             if(latitude !=null && longitude !=null)
             {
                 var postData = {
@@ -101,7 +140,7 @@
                     "longitude", longitude
                 ],
                     "country": "us",
-                    "crypto": "DASH",
+                    "crypto": cryptoCurrency,
                     "cryptoAmount": "0",
                     "usdAmount": amount,
                 }
@@ -116,7 +155,7 @@
                 var postData = {
                     'publisherId': publisherId,
                     'usdAmount': amount,
-                    'crypto': 'DASH',
+                    'crypto': cryptoCurrency,
                     'bank': bank,
                     'zipCode': zip,
                     'cryptoAmount': '0'
@@ -203,7 +242,7 @@
             }
 
             var postData = {
-                //'publisherId': publisherId,
+                'publisherId': publisherId,
                 'phone': "+1"+phone,
                 'email': localStorage.getItem("Email"),
                 'offer': offer_Id,
@@ -211,6 +250,9 @@
                 'deviceCode': deviceCode,
             }
 
+            /*alert(postData);
+            alert(JSON.stringify(postData));
+            return false;*/
             $.ajax({
                 url: apiUrl+'/api/v1/holds/',
                 headers: requestHeader,
@@ -242,6 +284,40 @@
                     location.href = "purchase-code.html";
                 }
             });
+
+
+            /*$.ajax({
+                url: apiUrl+'/api/v1/holds/',
+                data: postData,
+                method: 'POST',
+                beforeSend: function(xhrObj) {
+                    xhrObj.setRequestHeader("X-Coins-Publisher", publisherId);
+                    xhrObj.setRequestHeader("Accept","application/json");
+                },
+                success: function(data) {
+                    localStorage.removeItem("Offer");
+                    localStorage.removeItem("Email");
+
+                    var purchase_code = data.__PURCHASE_CODE;
+                    var purchse_token = data.token;
+                    var id = data.id;
+                    var device_id = data.deviceId;
+
+                    localStorage.setItem("PurchaseCode",purchase_code);
+                    localStorage.setItem("PurchaseToken",purchse_token);
+                    localStorage.setItem("PurchaseId",id);
+                    localStorage.setItem("deviceId",device_id);
+
+                    var test = localStorage.getItem("test");
+                    var obj = [];
+                    if(test){
+                        obj = JSON.parse(test);
+                    }
+                    obj.push({"phone": phone,"device_id": device_id,"device_code":localStorage.getItem("deviceCode"),"token":purchse_token});
+                    localStorage.setItem("test",JSON.stringify(obj));
+                    location.href = "purchase-code.html";
+                }
+            });*/
         },
         confirm: function () { //capture hold api
             var token = localStorage.getItem("PurchaseToken");
@@ -276,6 +352,7 @@
                     if(obj[i].phone == number)
                     {
                         obj[i]["response"] = localStorage.getItem("Response");
+                        obj[i]["crypto"] = localStorage.getItem("Crypto");
                         localStorage.setItem("test",JSON.stringify(obj));
                     }
                 }
@@ -305,10 +382,10 @@
                 location.href = "buy-more-dash.html";
             });*/
 
-            var requestHeader = {
+            /*var requestHeader = {
                 "X-Coins-Publisher": publisherId,
                 "X-Coins-Api-Token": localStorage.getItem("PurchaseToken")
-            }
+            }*/
 
             $.ajax({
                 async: true,
@@ -394,8 +471,10 @@
                 method: 'DELETE',
                 success: function(data) {
                     localStorage.removeItem("signInNumber");
-                    localStorage.removeItem("phone")
-                    location.href = "buy-dash-with-cash.html";
+                    localStorage.removeItem("phone");
+                    localStorage.removeItem("Crypto");
+                    //location.href = "buy-dash-with-cash.html";
+                    location.href = "index.html";
                 }
             });
         },
@@ -436,7 +515,6 @@
 
             $.ajax({
                 url: apiUrl+'/api/v1/holds/',
-                accept: requestHeader,
                 headers: requestHeader,
                 data: postData,
                 method: 'POST',
@@ -452,8 +530,27 @@
                 },
                 error: function(data) {
 
-                    location.href = "buy-more-dash.html";
+                    location.href = "create-password.html";
+
+                    //location.href = "buy-more-dash.html";
                     //$('#getOrdersBtn').trigger('click');
+                }
+            });
+        },
+        getCryptos: function () {
+            var requestHeader = {
+                "X-Coins-Publisher": publisherId,
+            }
+            $.ajax({
+                url: apiUrl+'/api/v1/crypto/',
+                headers: requestHeader,
+                data: '',
+                method: 'GET',
+                success: function(data) {
+                    localStorage.setItem("CryptoDetails",JSON.stringify(data));
+                    displayCryptoOptions(data);
+                },
+                error: function(data) {
                 }
             });
         }
@@ -473,7 +570,8 @@
             //'signIn',
             'signOut',
             'getAuthToken',
-            'createHoldWithToken'
+            'createHoldWithToken',
+            'getCryptos'
         ];
         for (var i=0;i<clickHandlers.length;i++){
             $('#'+clickHandlers[i]+'Btn').click(actions[clickHandlers[i]]);

@@ -30,9 +30,9 @@
 
 <div class="container">
     <div class="header">
-        <div class="header-logo">
+        <div class="header-logo" id="header">
                 <a href="javascript: history.go(-1)" id="back_btn"><img alt="image" class="img-responsive back-arrow" src="images/back_arrow.png" id="history-back"></a>
-            <h4>Buy Dash With Cash</h4>
+            <!--<h4>Buy Dash With Cash</h4>-->
         </div>
 
         <div class="content">
@@ -68,6 +68,23 @@
     });
 
     $(document).ready(function () {
+
+        var Crypto_name = localStorage.getItem("Crypto");
+        var test = localStorage.getItem("CryptoDetails");
+        var json = JSON.parse(test);
+
+        if(Crypto_name == null){
+            $('#header').append('<h4>WOC</h4>');
+        }
+        else
+        {
+            for (var i = 0; i < json.length; i++) {
+                if (Crypto_name == json[i].code) {
+                    $('#header').append('<h4>' + json[i].name + '</h4>');
+                }
+            }
+        }
+        /*$('#header').append('<h4>' + Crypto_name + '</h4>');*/
 
         $("#getBanksBtn").trigger("click");
         

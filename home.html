@@ -13,30 +13,28 @@
     
     <!-- font-awesome -->
     <!--  <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css"> -->
-    
-       
-  
-	
   </head>
   <body>
     <div class="container">
         <div class="header">
-          <div class="header-logo">
-            Dash
+          <div class="header-logo" id="header">
+              <a href="javascript: history.go(-1)"><img alt="image" class="img-responsive back-arrow" src="images/back_arrow.png"></a>
+              <!--<h4>Buy Dash With Cash</h4>-->
+            <!--<h4>Dash</h4>-->
           </div>
           <div class="header-settings">
         </div>
 
-        <div class="content">
+        <div class="content" id="content">
 
-                <p><strong>No. Dash Received so far.</strong></p>
+                <!--<p><strong>No. Dash Received so far.</strong></p>
                 <p>How to get Dash?</p>
                 <p>Trade for traditional money,
                     sell goods or services or 
                     earn by working.    
-                </p>
-                <a href="buy-dash-with-cash.html"><button type="button" class="btn">BUY DASH WITH CASH</button></a>
+                </p>-->
 
+                <!--<a href="buy-dash-with-cash.html"><button type="button" class="btn" id="buyDash" name="buyDash">BUY DASH WITH CASH</button></a>-->
         </div>
       
         <div class="footer">
@@ -61,10 +59,39 @@
         $(document.body).css("--secondary-color", secondaryColor);
       });
 
-      /*$(document).ready(function () {
+      $(document).ready(function () {
 
-          var testtwo = localStorage.getItem("deviceName");
-          alert("deviceName = "+testtwo);
-      });*/
+          var Crypto_name = localStorage.getItem("Crypto");
+
+          var test = localStorage.getItem("CryptoDetails");
+          var json = JSON.parse(test);
+
+          if(Crypto_name == null){
+              $('#header').append('<h4>WOC</h4>');
+          }
+          else
+          {
+              for (var i = 0; i < json.length; i++) {
+                  if (Crypto_name == json[i].code) {
+                      $('#header').append('<h4>' + json[i].name + '</h4>');
+                  }
+              }
+          }
+
+          /*$('#header').append('<h4>'+Crypto_name+'</h4>');*/
+
+          if(Crypto_name == 'DASH')
+          {
+              $('#content').append('<p><strong>No. Dash Received so far.</strong></p><p>How to get Dash?</p><p>Trade for traditional money, sell goods or services or earn by working.</p><a href="buy-dash-with-cash.html"><button type="button" class="btn">BUY DASH WITH CASH</button></a>');
+          }
+          else if(Crypto_name == 'PIVX')
+          {
+              $('#content').append('<p><strong>No. PIVX Received so far.</strong></p><p>How to get PIVX?</p><p>Trade for traditional money, sell goods or services or earn by working.</p><a href="buy-dash-with-cash.html"><button type="button" class="btn">BUY PIVX WITH CASH</button></a>');
+          }
+          else if(Crypto_name == 'BTC')
+          {
+              $('#content').append('<p><strong>No. BTC Received so far.</strong></p><p>How to get BTC?</p><p>Trade for traditional money, sell goods or services or earn by working.</p><a href="buy-dash-with-cash.html"><button type="button" class="btn">BUY BTC WITH CASH</button></a>');
+          }
+      });
     </script>
 </html>
