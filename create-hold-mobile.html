@@ -75,7 +75,7 @@
         <div class="content">
             <p><strong>A mobile phone that can receive text messages is required for order verification.</strong></p>
 
-            <div class="input-group">
+            <div class="input-group" id="group_div">
                 <select id="country" class="form-control" name="country" style="width: 50%; ">
                     <option value="1">United States (+1)</option>
                     <option value="2">United Kingdom (+44)</option>
@@ -171,10 +171,11 @@
         $("#NextBtn").on("click", function () {
 
             var phone = $('#phone').val();
+            $('.help-block').remove();
 
             if(phone == '' || phone == 'undefined')
             {
-                $('<span id="phone-error" class="help-block" style="text-align: center;">Please enter phone number</span>').insertAfter("#Phone");
+                $('<span id="phone-error" class="help-block" style="text-align: center;">Please enter phone number</span>').insertAfter("#group_div");
             }
             else
             {

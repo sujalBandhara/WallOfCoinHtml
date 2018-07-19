@@ -89,6 +89,7 @@
         $("#emailNextBtn").on('click', function () {
 
             var email = $('#email').val();
+            $('.help-block').remove();
 
             if(email == '' || email == 'undefined')
             {
