@@ -2,14 +2,24 @@
     apiUrl = "https://woc.reference.genitrust.com";
     //apiurl = "http://woc.reference.genitrust.com";
     publisherId = 52;
-    deviceName = "DASH WALLET (WEB)";
-    deviceCode = "5571166-5571166-5571166-5571166";
+    deviceName = "DASH WALLET (WEB)"
+
     //var device = (Math.floor(Math.random()*9000000) + 1000000);
     //var deviceCode = device + "-" + device + "-" + device + "-" + device;
 
-    localStorage.setItem("deviceName",deviceName);
-    localStorage.setItem("deviceCode",deviceCode);
+    localStorage.setItem("deviceName", deviceName);
+    //localStorage.setItem("deviceCode", deviceCode);
 
+    var device = localStorage.getItem("deviceCode");
+
+    if(device != null) {
+        deviceCode = device;
+    }
+    else{
+        deviceCode = "5571166-5571166-5571166-5571166";
+    }
+
+    //alert(deviceCode);
     /*code to delete object from json array*/
 
     /*var obj = localStorage.getItem("test");
@@ -44,16 +54,22 @@
     localStorage.removeItem("signInNumber");
     localStorage.removeItem("Crypto");
     localStorage.removeItem("CryptoDetails");
-    localStorage.removeItem('amount');*/
-
+    localStorage.removeItem('amount');
+    localStorage.removeItem("holds");
+    localStorage.removeItem("holdId");*/
     /*function getCrypto() {
         return ($('#crypto').is(':checked')?'DASH':'BTC');
     }*/
 
-    function displayOption(options) {
+    function displayOption(options,doubleDeposit,multipleBanks) {
 
         var cryptoCurrency = localStorage.getItem("CryptoDetails");
         var currency = JSON.parse(cryptoCurrency);
+
+        /*for single deposit*/
+        if(options.length > 0){
+            $('<h5 style="text-align: center;">Below are offers for $'+localStorage.getItem("amount")+'. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>').insertAfter('#header');
+        }
 
         for(var j = 0; j < currency.length; j++) {
 
@@ -94,6 +110,165 @@
                 }
             }
         }
+        /*code end here*/
+
+        /*for double deposit*/
+        if(doubleDeposit.length > 0){
+            $('<h5 style="text-align: center;">Best Value Options: More '+localStorage.getItem("Crypto")+' for $'+localStorage.getItem("amount")+' Cash</h5>').insertAfter('#offer_div');
+        }
+
+        for(var j = 0; j < currency.length; j++) {
+            for (var i = 0; i < doubleDeposit.length; i++) {
+
+                var firstOffer = doubleDeposit[i].firstOffer;
+
+                if(firstOffer.crypto == currency[j].code) {
+
+                    if (firstOffer.crypto == 'DASH') {
+
+                        if (address != '') {
+
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + firstOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + firstOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + firstOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + firstOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (firstOffer.crypto == 'PIVX'){
+
+                        if (address != '') {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + firstOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + firstOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + firstOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + firstOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (firstOffer.crypto == 'BTC'){
+
+                        if (address != '') {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + firstOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + firstOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + firstOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + firstOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + firstOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + firstOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + firstOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + firstOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                }
+
+                var secondOffer = doubleDeposit[i].secondOffer;
+
+                if(secondOffer.crypto == currency[j].code) {
+
+                    if (secondOffer.crypto == 'DASH') {
+
+                        if (address != '') {
+
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + secondOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (secondOffer.crypto == 'PIVX'){
+
+                        if (address != '') {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + firstOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (secondOffer.crypto == 'BTC'){
+
+                        if (address != '') {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + secondOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#doubleDeposit_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                }
+            }
+        }
+        /*code end here*/
+
+        /*for multiple banks*/
+        if(multipleBanks.length > 0){
+            $('<h5 style="text-align: center;">Best Value Options: More '+localStorage.getItem("Crypto")+' for $'+localStorage.getItem("amount")+' Cash</h5>').insertAfter('#doubleDeposit_div');
+        }
+
+        for(var j = 0; j < currency.length; j++) {
+            for (var i = 0; i < multipleBanks.length; i++) {
+
+                var multipleOffer = multipleBanks[i].firstOffer;
+
+                if(multipleOffer.crypto == currency[j].code) {
+
+                    if (multipleOffer.crypto == 'DASH') {
+
+                        if (address != '') {
+
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + multipleOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + multipleOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + multipleOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + multipleOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (multipleOffer.crypto == 'PIVX'){
+
+                        if (address != '') {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + multipleOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + multipleOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + multipleOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + multipleOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (multipleOffer.crypto == 'BTC'){
+
+                        if (address != '') {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + multipleOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + multipleOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + multipleOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + multipleOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + multipleOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + multipleOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + multipleOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + multipleOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                }
+
+                var secondOffer = multipleBanks[i].secondOffer;
+
+                if(secondOffer.crypto == currency[j].code) {
+
+                    if (secondOffer.crypto == 'DASH') {
+
+                        if (address != '') {
+
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + secondOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.DASH + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.dots + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (secondOffer.crypto == 'PIVX'){
+
+                        if (address != '') {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + firstOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.PIVX + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.uPiv + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                    else if (secondOffer.crypto == 'BTC'){
+
+                        if (address != '') {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span></a></p><small class="pull-right">Pay $' + secondOffer.deposit.amount + '</small><p style="margin: 0px; text-align: left;">' + secondOffer.address + '</p></div></div></div></div></div>');
+                        }
+                        else {
+                            $("#multiplebanks_div").append('<div class="row list-group"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" style="height: 50px; width: 50px;"class="img-responsive" src=' + secondOffer.bankLogo + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"  style="color: #080808;"></a><p class="media-heading" style="text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>'+currency[j].symbol+' ' + secondOffer.amount.BTC + '</span><small class="pull-right"><button type="button" class="btn btn-success" id="orderBtn" name="orderBtn" onclick="holdCreate(' + i + ',' + doubleDeposit.length + ');">ORDER</button><input type="hidden" id="offerId_' + i + '" name="offerId_' + i + '" value="' + doubleDeposit[i].id + '"></small></a></p><p style="margin: 0px; text-align: left;">('+currency[j].minorSymbol+' ' + secondOffer.amount.bits + ')</p><p class="media-heading" style="margin: 0px; text-align: left;"><a href="#" target="_parent" style="color: #080808;"><span>' + secondOffer.bankName + '</span><small class="pull-right" style="margin-right: -60px; margin-top: 5px;">Pay $' + secondOffer.deposit.amount + '</small></a></p><p style="margin: 0px; text-align: left;">Subject to local availability  ' + '<a class="pull-right" href="' + secondOffer.bankLocationUrl + '">Check Location' + '</a></p></div></div></div></div></div>');
+                        }
+                    }
+                }
+            }
+        }
+        /*code end*/
     }
 
     function displayBankOptions(options) {
@@ -117,6 +292,7 @@
             var reqUrl = apiUrl+'/api/v1/banks/';
             $.ajax({
                 url: reqUrl,
+                headers: {"X-Coins-Publisher": publisherId},
                 success: function(data) {
                     displayBankOptions(data);
                 },
@@ -164,6 +340,7 @@
 
             $.ajax({
                 url: reqUrl,
+                headers: {"X-Coins-Publisher": publisherId},
                 data: postData,
                 method: 'POST',
                 success: function(data) {
@@ -179,16 +356,18 @@
         getOffers: function () {
             $.ajax({
                 url: apiUrl+'/api/v1/discoveryInputs/'+localStorage.getItem("discoveryId")+'/offers/',
+                headers: {"X-Coins-Publisher": publisherId},
                 success: function(data) {
                     //localStorage.removeItem("discoveryId");
 
-                    if(data.singleDeposit == '')
+
+                    if(data.singleDeposit == '' && data.doubleDeposit == '' && data.multipleBanks == '')
                     {
                         alert("offers not available");
                     }
                     else
                     {
-                        displayOption(data.singleDeposit);
+                        displayOption(data.singleDeposit,data.doubleDeposit,data.multipleBanks);
                     }
                 }
             });
@@ -237,17 +416,40 @@
             //var deviceCode = "6525648B-71DD-4846-9274-5B7815F85C85";
             localStorage.setItem("signInNumber",phone);
 
+            var check_number = JSON.parse(localStorage.getItem("test"));
+            var phoneNUmber = localStorage.getItem("phone");
+
+            if(check_number != null) {
+                for(var i = 0; i < check_number.length; i++) {
+                    if(phoneNUmber == check_number[i].phone) {
+                        localStorage.setItem("deviceCode",check_number[i].device_code);
+                    }
+                    else {
+
+                        var testCode = deviceCode.split("-");
+                        var code = testCode[3];
+                        var device = Number(code)+1;
+                        var device_code = "5571166-5571166-5571166-"+device;
+                        deviceCode = device_code;
+                        localStorage.setItem("deviceCode", device_code);
+                        //deviceCode + 1;
+                    }
+                }
+            }
+            else {
+                localStorage.setItem("deviceCode", deviceCode);
+            }
+
             var requestHeader = {
                 "X-Coins-Publisher": publisherId,
             }
 
             var postData = {
-                'publisherId': publisherId,
                 'phone': "+1"+phone,
                 'email': localStorage.getItem("Email"),
                 'offer': offer_Id,
                 'deviceName': localStorage.getItem("deviceName"),
-                'deviceCode': deviceCode,
+                'deviceCode': localStorage.getItem("deviceCode"),
             }
 
             /*alert(postData);
@@ -400,10 +602,15 @@
                 contentType: false,
                 success: function(data) {
                     //alert(data.status);
-                    location.href = "buy-dash-with-cash_with-order-history.html";
+                    var phone_number = localStorage.getItem("phone");
+                    localStorage.setItem("signInNumber",phone_number);
+                    //location.href = "buy-dash-with-cash_with-order-history.html";
+                    location.href = "buy-more-dash.html";
                 },
                 error: function (data) {
                     //alert(data.status);
+                    var phone_number = localStorage.getItem("phone");
+                    localStorage.setItem("signInNumber",phone_number);
                     location.href = "buy-more-dash.html";
                 }
             });
@@ -424,11 +631,16 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    //alert(data.status);
-                    location.href = "buy-dash-with-cash_with-order-history.html";
+
+                    var phone_number = localStorage.getItem("phone");
+                    localStorage.setItem("signInNumber",phone_number);
+                    //location.href = "buy-dash-with-cash_with-order-history.html";
+                    location.href = "buy-more-dash.html";
                 },
                 error: function(data) {
-                    //alert(data.status);
+
+                    var phone_number = localStorage.getItem("phone");
+                    localStorage.setItem("signInNumber",phone_number);
                     location.href = "buy-more-dash.html";
                 }
             });
@@ -443,7 +655,29 @@
                 method: "GET",
                 success: function(data) {
                     //alert(data);
-                    location.href = "buy-more-dash.html";
+                    var phone = localStorage.getItem("phone");
+                    var signInNumber = localStorage.getItem("signInNumber");
+
+                    var test = JSON.stringify(data);
+                    var orders = JSON.parse(test);
+
+                    if(orders != '')
+                    {
+                        if(phone == signInNumber)
+                        {
+                            if(orders.status == "WD") {
+                                //$('#cancelOrderBtn').trigger('click');
+                                location.href = "deposit.html";
+                            }
+                            else {
+                                $('#createHoldWithTokenBtn').trigger('click');
+                            }
+                        }
+                    }
+                    else {
+                        location.href = "buy-more-dash.html";
+                    }
+                    //location.href = "buy-more-dash.html";
                 },
                 error: function (data) {
                     location.href = "buy-more-dash.html";
@@ -488,7 +722,7 @@
             $.ajax({
                 //url: 'https://woc.reference.genitrust.com' + '/api/v1/auth/' + (phone[0]=='+'?phone.substring(1):phone) + '/authorize/',
                 url: apiUrl + '/api/v1/auth/'+phone+'/authorize/',
-                headers: {"X-Coins-Publisher": "52"},
+                headers: {"X-Coins-Publisher": publisherId},
                 data: postData,
                 method: 'POST',
                 success: function(data) {
@@ -530,10 +764,8 @@
                 },
                 error: function(data) {
 
-                    location.href = "create-password.html";
-
-                    //location.href = "buy-more-dash.html";
-                    //$('#getOrdersBtn').trigger('click');
+                    $('#getHoldsBtn').trigger('click');
+                    //location.href = "create-password.html";
                 }
             });
         },
@@ -551,6 +783,57 @@
                     displayCryptoOptions(data);
                 },
                 error: function(data) {
+                }
+            });
+        },
+        getHolds: function () {
+            var requestHeader = {
+                "X-Coins-Publisher": publisherId,
+                "X-Coins-Api-Token": localStorage.getItem("PurchaseToken")
+            }
+            $.ajax({
+                url: apiUrl+'/api/v1/holds/',
+                headers: requestHeader,
+                data: '',
+                method: 'GET',
+                success: function(data) {
+
+                    localStorage.setItem("holds",JSON.stringify(data));
+                    var holds = JSON.parse(localStorage.getItem("holds"));
+
+                    for(var i = 0; i< holds.length; i++)
+                    {
+                        if(holds[i].status == "AC"){
+                            localStorage.setItem("holdId",holds[i].id);
+                            $('#deleteHoldBtn').trigger('click');
+                        }
+                        else if(holds[i].status == "CAP") {
+                            $('#getOrdersBtn').trigger('click');
+                        }
+                    }
+
+                },
+                error: function(data) {
+                    //alert(data.status);
+                }
+            });
+        },
+        deleteHold: function () {
+            var hold_id = localStorage.getItem("holdId");
+            var requestHeader = {
+                "X-Coins-Publisher": publisherId,
+                "X-Coins-Api-Token": localStorage.getItem("PurchaseToken")
+            }
+            $.ajax({
+                url: apiUrl+'/api/v1/holds/'+hold_id,
+                headers: requestHeader,
+                data: '',
+                method: 'DELETE',
+                success: function(data) {
+                    $('#createHoldWithTokenBtn').trigger('click');
+                },
+                error: function(data) {
+                    //alert(data.status);
                 }
             });
         }
@@ -571,7 +854,9 @@
             'signOut',
             'getAuthToken',
             'createHoldWithToken',
-            'getCryptos'
+            'getCryptos',
+            'getHolds',
+            'deleteHold'
         ];
         for (var i=0;i<clickHandlers.length;i++){
             $('#'+clickHandlers[i]+'Btn').click(actions[clickHandlers[i]]);

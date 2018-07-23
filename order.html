@@ -27,7 +27,11 @@
             <!--<h4>Buy Dash With Cash</h4>-->
           </div>
           <!--<h5 style="text-align: center;">Below are offers for $5.0. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>-->
-            <div class="content" style="height: 500px; margin-top: -20px;" id="offer_div"></div>
+            <div class="content" style="margin-top: -20px;" id="offer_div"></div>
+
+            <div class="content" style="margin-top: -20px;" id="doubleDeposit_div"></div>
+
+            <div class="content" style="margin-top: -20px;" id="multiplebanks_div"></div>
          <!--<div class="row list-group">
             <div class="col-sm-12"> 
 
@@ -55,6 +59,11 @@
             </div>-->
         <button type="button" class="btn hidden" id="getOffersBtn" name="getOffersBtn">GET OFFERS</button>
             <button type="button" class="btn hidden" id="createHoldWithTokenBtn" name="createHoldWithTokenBtn">Create hold</button>
+            <button type="button" class="btn hidden" id="getHoldsBtn" name="getHoldsBtn">Hold List</button>
+            <button type="button" class="btn hidden" id="getOrdersBtn" name="getOrdersBtn">Order List</button>
+            <button type="button" class="btn hidden" id="deleteOrderBtn" name="deleteOrderBtn">delete Order</button>
+            <button type="button" class="btn hidden" id="cancelOrderBtn" name="cancelOrderBtn">cancel Order</button>
+            <!--<button type="button" class="btn hidden" id="createHoldBtn" name="createHoldBtn">create hold</button>-->
       </div>
         <div class="footer">
           <span class="footer-note">
@@ -96,7 +105,7 @@
 
           /*$('#header').append('<h4>'+Crypto_name+'</h4>');*/
 
-          $('<h5 style="text-align: center;">Below are offers for $'+localStorage.getItem("amount")+'. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>').insertAfter('#header');
+          /*$('<h5 style="text-align: center;">Below are offers for $'+localStorage.getItem("amount")+'. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>').insertAfter('#header');*/
 
           $("#getOffersBtn").trigger("click");
 
@@ -114,16 +123,10 @@
                   var sign_in_number = localStorage.getItem("signInNumber");
                   var phone_number = localStorage.getItem("phone");
 
-                  //alert(sign_in_number);
-                  //alert(phone_number);
-                  if(sign_in_number!=null && sign_in_number == phone_number)
-                  {
-                      //alert("if");
+                  if(sign_in_number!=null && sign_in_number == phone_number) {
                       $('#createHoldWithTokenBtn').trigger('click');
                   }
-                  else
-                  {
-                      //alert("else");
+                  else {
                       location.href = "create-hold-email.html";
                   }
 
