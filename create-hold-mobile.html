@@ -45,7 +45,7 @@
         margin: 15% auto; /* 15% from the top and centered */
         padding: 20px;
         border: 1px solid #888;
-        width: 80%; /* Could be more or less, depending on screen size */
+        width: 20%; /* Could be more or less, depending on screen size */
     }
 
     /* The Close Button */
@@ -88,8 +88,6 @@
                     <option value="9">Ghana (+233)</option>
                 </select>
                 <input type="text" id="phone" placeholder="Phone" name="phone" class="form-control" value="" style="width: 48%; margin-left: 2px;"/>
-                <!--<input type="hidden" id="password" name="password" class="form-control" value="sujal123456"/>-->
-                <!--<input type="hidden" id="publisherId" placeholder=" " name="publisherId" class="form-control" value="52"/>-->
             </div>
 
             <!-- The Modal -->
@@ -102,7 +100,7 @@
 
                     <p>Input your password below:</p>
 
-                    <input type="text" id="password" placeholder="Password" name="password" class="form-control" value=""/>
+                    <input type="password" id="password" placeholder="Password" name="password" class="form-control" value=""/>
 
                     <p>Your password is transmitted securely.</p>
 
@@ -111,9 +109,6 @@
                 </div>
 
             </div>
-            <!--<div class="form-group">
-                <input type="text" id="mobile" placeholder="Mobile" name="mobile" class="input" value=""/>
-            </div>-->
 
             <button type="button" class="btn btn-d" id="NextBtn" name="NextBtn"><b>Next</b></button>
             <button type="button" class="btn btn-d hidden" id="authUserBtn" name="authUserBtn"><b>AUTH USER</b></button>
@@ -123,7 +118,8 @@
             <button type="button" class="btn btn-d hidden" id="getHoldsBtn" name="getHoldsBtn"><b>GET HOLDS</b></button>
             <button type="button" class="btn btn-d hidden" id="getDeviceInfo" name="getDeviceInfo"><b>GET DEVICE INFO</b></button>
             <button type="button" class="btn btn-d hidden" id="createHoldWithTokenBtn" name="createHoldWithTokenBtn"><b>CREATE HOLD WITH TOKEN </b></button>
-            <!--<a href="home.html">--><!--<button type="button" id="discoveryBtn" name="discoveryBtn" class="btn btn-default">GET OFFERS</button>--><!--</a>-->
+            <button type="button" class="btn btn-d hidden" id="getOrdersBtn" name="getOrdersBtn"><b>GET ORDERS</b></button>
+
         </div>
 
         <div class="footer">
@@ -166,8 +162,6 @@
             }
         }
 
-        /*$('#header').append('<h4>' + Crypto_name + '</h4>');*/
-
         $("#NextBtn").on("click", function () {
 
             var phone = $('#phone').val();
@@ -179,18 +173,6 @@
             }
             else
             {
-                /*var test = localStorage.getItem("test");
-                var obj = [];
-                if(test){
-                    obj= JSON.parse(test);
-                }
-                obj.push({"id":  "phone", "name":phone});
-                localStorage.setItem("test",JSON.stringify(obj));
-
-                localStorage.setItem("phone",phone);*/
-
-                /*var testone = localStorage.getItem("test");
-                alert(testone);*/
                 localStorage.setItem("phone",phone);
                 $('#authUserBtn').trigger("click");
             }

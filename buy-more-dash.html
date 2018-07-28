@@ -121,7 +121,6 @@
       });
 
       $(document).ready(function () {
-          $('#getOrdersBtn').trigger('click');
 
           var Crypto_name = localStorage.getItem("Crypto");
           var test = localStorage.getItem("CryptoDetails");
@@ -142,31 +141,27 @@
           var phone = localStorage.getItem("phone");
           $("#test").append("+1"+phone);
 
-          var orders = localStorage.getItem("orders");
-          if(orders == null)
-          {
-              var options = localStorage.getItem("test");
-              var obj = JSON.parse(options);
+          $.ajax({
+              url: 'https://woc.reference.genitrust.com/api/v1/orders/',
+              headers: {
+                  "X-Coins-Publisher": publisherId,
+                  "X-Coins-Api-Token": localStorage.getItem("PurchaseToken")
+              },
+              method: "GET",
+              success: function(data) {
 
-              for (var i = 0; i < obj.length; i++) {
-                  if(phone == obj[i].phone) {
-                      var order_history = JSON.parse(obj[i].response);
-
-                      $('<div class="row list-group" style="margin-bottom: 10px;"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing" style="border-radius: 10px;" id="media_div"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+order_history[0]["bankLogo"]+'></a><div class="media-body fnt-smaller"><p style="margin: 0px;"> <span>'+order_history[0]["bankName"]+'</span></p></div><br><br><p style="margin: 0px;">Cash to Deposit: $'+order_history[0]["payment"]+'</p><p style="margin: 0px;">Status: '+order_history[0]["status"]+'</p><p style="margin: 0px;">Total Dash: '+order_history[0]["total"]+'</p></div></div></div></div>').insertAfter("#media_div");
+                  console.log(data);
+                  if(data != null && data.length > 0){
+                      for(var i = 0; i < data.length; i++){
+                          $('<div class="row list-group" style="margin-bottom: 10px;"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing" style="border-radius: 10px;" id="media_div"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+data[i]["bankLogo"]+'></a><div class="media-body fnt-smaller"><p style="margin: 0px;"> <span>'+data[i]["bankName"]+'</span></p></div><br><br><p style="margin: 0px;">Cash to Deposit: $'+data[i]["payment"]+'</p><p style="margin: 0px;">Status: '+data[i]["status"]+'</p><p style="margin: 0px;">Total Dash: '+data[i]["total"]+'</p></div></div></div></div>').insertAfter("#media_div");
+                      }
                   }
+              },
+              error: function (data) {
+                  location.href = "buy-more-dash.html";
               }
-          }
-          else
-          {
-              var obj = JSON.parse(orders);
-
-              for (var i = 0; i < obj.length; i++) {
-
-                  $('<div class="row list-group" style="margin-bottom: 10px;"><div class="col-sm-12"><div class="list bgc-fff pad-10 box-shad  property-listing" style="border-radius: 10px;" id="media_div"><div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+obj[i]["bankLogo"]+'></a><div class="media-body fnt-smaller"><p style="margin: 0px;"> <span>'+obj[i]["bankName"]+'</span></p></div><br><br><p style="margin: 0px;">Cash to Deposit: $'+obj[i]["payment"]+'</p><p style="margin: 0px;">Status: '+obj[i]["status"]+'</p><p style="margin: 0px;">Total Dash: '+obj[i]["total"]+'</p></div></div></div></div>').insertAfter("#media_div");
-              }
-          }
-      })
-
+          });
+      });
     </script>
    
 </body>

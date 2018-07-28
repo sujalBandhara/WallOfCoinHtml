@@ -125,31 +125,20 @@
         var json_array = localStorage.getItem("test");
         var JSONArray = JSON.parse(json_array);
 
-        for(var i =0; i < JSONArray.length; i++)
-        {
-            if(JSONArray[i].phone == phone)
-            {
-                localStorage.setItem("Crypto",JSONArray[i].crypto);
-            }
-        }
-
         var Crypto_name = localStorage.getItem("Crypto");
-        var test = localStorage.getItem("CryptoDetails");
+        var test = localStorage.getItem("CryptoDetails"); //details of crypto code , symbol, name
         var json = JSON.parse(test);
 
         if(Crypto_name == null){
-            $('#header').append('<h4>WOC</h4>');
+            $('#header').append('<h4>WOC</h4>'); //if crypto name is not stored in local storage then it will show WOC
         }
-        else
-        {
+        else {
             for (var i = 0; i < json.length; i++) {
-                if (Crypto_name == json[i].code) {
+                if (Crypto_name == json[i].code) { //to show crypto name in header
                     $('#header').append('<h4>' + json[i].name + '</h4>');
                 }
             }
         }
-
-
     })
 </script>
 

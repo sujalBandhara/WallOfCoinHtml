@@ -70,18 +70,20 @@
 
         $(document).ready(function () {
 
-            var code = localStorage.getItem("PurchaseCode");
-            var token = localStorage.getItem("PurchaseToken");
+            var code = localStorage.getItem("PurchaseCode"); // to show code in input field
+            var token = localStorage.getItem("PurchaseToken"); // token for api and to store in hidden input field value
+
+            console.log(localStorage.getItem("PhoneArray"));
 
             $("#code").val(code);
             $("#token").val(token);
 
             var Crypto_name = localStorage.getItem("Crypto");
-            var test = localStorage.getItem("CryptoDetails");
+            var test = localStorage.getItem("CryptoDetails"); //details of crypto code , symbol, name
             var json = JSON.parse(test);
 
             if(Crypto_name == null){
-                $('#header').append('<h4>WOC</h4>');
+                $('#header').append('<h4>WOC</h4>'); //if crypto name is not stored in local storage then it will show WOC
             }
             else
             {
@@ -91,8 +93,6 @@
                     }
                 }
             }
-
-            /*$('#header').append('<h4>'+Crypto_name+'</h4>');*/
         })
 
     </script>

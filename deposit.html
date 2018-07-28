@@ -92,6 +92,7 @@
 
                                 <p style="margin: 0px;" id="contact_number"> Your wallet is signed into Wall of Coins using your mobile number </p>
                                 <button type="button" class="btn btn-d" id="signOutBtn" name="signOutBtn">SIGN OUT</button>
+                                <button type="button" class="btn btn-d hidden" id="getOrdersBtn" name="getOrdersBtn">GET ORDER</button>
                             </div>
                         </div>
                     </div>
@@ -129,8 +130,7 @@
           if(Crypto_name == null){
               $('#header').append('<h4>WOC</h4>');
           }
-          else
-          {
+          else {
               for (var i = 0; i < json.length; i++) {
                   if (Crypto_name == json[i].code) {
                       $('#header').append('<h4>' + json[i].name + '</h4>');
@@ -138,98 +138,85 @@
               }
           }
 
-          /*$('#header').append('<h4>'+Crypto_name+'</h4>');*/
-
           var token = localStorage.getItem("PurchaseToken");
           $('#token').val(token);
 
           var contact_number = localStorage.getItem("phone");
           $('#contact_number').append("+1"+contact_number);
 
-          var options = localStorage.getItem("Response");
-          //alert(options);
+          var phone_number = localStorage.getItem("phone");
+          var order_list = JSON.parse(localStorage.getItem("orders"));
 
-          var JSONObject = JSON.parse(options);
-          var id = JSONObject[0]["id"];
-          $('#order_id').val(id);
+          $.ajax({
+              url: 'https://woc.reference.genitrust.com/api/v1/orders/',
+              headers: {
+                  "X-Coins-Publisher": publisherId,
+                  "X-Coins-Api-Token": localStorage.getItem("PurchaseToken")
+              },
+              method: "GET",
+              success: function(data) {
+                  console.log(JSON.stringify(data));
 
-          /*var test = JSON.parse(JSONObject[0].account);
-          alert(test);*/
+                  if(data != null && data.length > 0){
+                      for(var i = 0; i < data.length; i++){
+                          try {
+                              var order_status = JSON.parse(data[i].account);
+                              if (data[i].status == "WD") {
 
-          if(JSONObject[0].account!='' || JSONObject[0].account!=null || JSONObject[0].account!="undefined")
-          {
-                try{
+                                  var id = data[i].id;
+                                  $('#order_id').val(id);
 
-                    var country = JSON.parse(JSONObject[0].account);
-                    var nearest_branch = JSONObject[0].nearestBranch.phone;
+                                  var nearest_branch = data[i].nearestBranch.phone;
 
-                    if(nearest_branch == null) {
-                        var phone = "-";
-                    }
-                    else {
-                        var phone = nearest_branch;
-                    }
+                                  if (nearest_branch == null) {
+                                      var phone = "-";
+                                  }
+                                  else {
+                                      var phone = nearest_branch;
+                                  }
 
-                    $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+JSONObject[0]["bankLogo"]+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>'+JSONObject[0]["bankName"]+'<p style="margin: 0px;">Location\'s phone #: '+phone+'</p></div><br><br><p style="margin: 0px;">Country Of Birth : '+country[0].value+'</p><p style="margin: 0px;">Pick up State: '+country[1].value+'</p><p style="margin: 0px;">First Name : '+country[2].value+'</p><p style="margin: 0px;">Last Name : '+country[3].value+'</p><p style="margin: 0px;">Cash to Deposites: $ '+JSONObject[0]["payment"]+'</p><p style="margin: 0px;">Status: '+JSONObject[0]["status"]+'</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
-                }
-                catch(e) {
+                                  try {
+                                      var country = JSON.parse(data[i].account);
 
-                    var nearest_branch = JSONObject[0].nearestBranch.phone;
-                    if (nearest_branch == null) {
-                        var phone = "-";
-                    }
-                    else {
-                        var phone = nearest_branch;
-                    }
+                                      $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src=' + order_status[i]["bankLogo"] + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>' + order_status[i]["bankName"] + '<p style="margin: 0px;">Location\'s phone #: ' + phone + '</p></div><br><br><p style="margin: 0px;">Country Of Birth : ' + country[0].value + '</p><p style="margin: 0px;">Pick up State: ' + country[1].value + '</p><p style="margin: 0px;">First Name : ' + country[2].value + '</p><p style="margin: 0px;">Last Name : ' + country[3].value + '</p><p style="margin: 0px;">Cash to Deposites: $ ' + order_status[i]["payment"] + '</p><p style="margin: 0px;">Status: ' + order_status[i]["status"] + '</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
+                                  } catch (e) {
 
-                    $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src=' + JSONObject[0]["bankLogo"] + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>' + JSONObject[0]["bankName"] + '<p style="margin: 0px;">Location\'s phone #: ' + phone + '</p></div><br><br><p style="margin: 0px;">Account #'+JSONObject[0]["account"]+'</p><p style="margin: 0px;">Cash to Deposites: $ ' + JSONObject[0]["payment"] + '</p><p style="margin: 0px;">Status: ' + JSONObject[0]["status"] + '</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
-                }
-          }
-          else
-          {
-              var nearest_branch = JSONObject[0].nearestBranch.phone;
+                                      $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src=' + order_status[i]["bankLogo"] + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>' + order_status[i]["bankName"] + '<p style="margin: 0px;">Location\'s phone #: ' + phone + '</p></div><br><br><p style="margin: 0px;">Account #' + order_status[i]["account"] + '</p><p style="margin: 0px;">Cash to Deposites: $ ' + order_status[i]["payment"] + '</p><p style="margin: 0px;">Status: ' + order_status[i]["status"] + '</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
+                                  }
+                              }
+                          }
+                          catch (e) {
+                              if (data[i].status == "WD") {
 
-              if(nearest_branch == null)
-              {
-                  var phone = "-";
+                                  var id = data[i].id;
+                                  $('#order_id').val(id);
+
+                                  var nearest_branch = data[i].nearestBranch.phone;
+
+                                  if (nearest_branch == null) {
+                                      var phone = "-";
+                                  }
+                                  else {
+                                      var phone = nearest_branch;
+                                  }
+
+                                  try {
+                                      var country = JSON.parse(data[i].account);
+
+                                      $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src=' + order_list[i]["bankLogo"] + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>' + data[i]["bankName"] + '<p style="margin: 0px;">Location\'s phone #: ' + phone + '</p></div><br><br><p style="margin: 0px;">Country Of Birth : ' + country[0].value + '</p><p style="margin: 0px;">Pick up State: ' + country[1].value + '</p><p style="margin: 0px;">First Name : ' + country[2].value + '</p><p style="margin: 0px;">Last Name : ' + country[3].value + '</p><p style="margin: 0px;">Cash to Deposites: $ ' + data[i]["payment"] + '</p><p style="margin: 0px;">Status: ' + data[i]["status"] + '</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
+                                  } catch (e) {
+
+                                      $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src=' + data[i]["bankLogo"] + '></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>' + data[i]["bankName"] + '<p style="margin: 0px;">Location\'s phone #: ' + phone + '</p></div><br><br><p style="margin: 0px;">Account #' + data[i]["account"] + '</p><p style="margin: 0px;">Cash to Deposites: $ ' + data[i]["payment"] + '</p><p style="margin: 0px;">Status: ' + data[i]["status"] + '</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              error: function (data) {
+                  location.href = "buy-more-dash.html";
               }
-              else
-              {
-                  var phone = nearest_branch;
-              }
-
-              $('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+JSONObject[0]["bankLogo"]+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>'+JSONObject[0]["bankName"]+'<p style="margin: 0px;">Location\'s phone #: '+phone+'</p></div><br><br><p style="margin: 0px;">Country Of Birth : '+country[0].value+'</p><p style="margin: 0px;">Pick up State: '+country[1].value+'</p><p style="margin: 0px;">First Name : '+country[2].value+'</p><p style="margin: 0px;">Last Name : '+country[3].value+'</p><p style="margin: 0px;">Cash to Deposites: $ '+JSONObject[0]["payment"]+'</p><p style="margin: 0px;">Status: '+JSONObject[0]["status"]+'</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");
-          }
-
-          //alert(country[1].value);
-
-          /*var test_json = JSON.parse(JSONObject[0].account);
-          //alert(test_json[0].value);
-          //alert(JSONObject[0].account.length);*/
-
-          /*var test1 = JSON.parse(country);
-          var test2 = test1[0]['name']['birthCountry'];
-          alert(test2);*/
-
-          //alert(JSONObject[0]['nearestBranch']["phone"]);
-          //$("#image").attr('src' , JSONObject[0]["bankLogo"]);
-
-          /*$('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px;" src='+JSONObject[0]["bankLogo"]+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>'+JSONObject[0]["bankName"]+'<p style="margin: 0px;">Location\'s phone #: '+JSONObject[0]['nearestBranch']["phone"]+'</p></div><br><br><p style="margin: 0px;">Name on Account: '+JSONObject[0]["nameOnAccount"]+'</p><p style="margin: 0px;">Account #: '+JSONObject[0]["account"]+'</p><p style="margin: 0px;">Cash to Deposites: $ '+JSONObject[0]["payment"]+'</p><p style="margin: 0px;">Status: '+JSONObject[0]["status"]+'</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");*/
-
-          /*$('<div class="media"><a class="pull-left" href="#" target="_parent"><img alt="image" class="img-responsive" style="margin-top: 0px; height: 50px; width: 50px;" src='+JSONObject[0]["bankLogo"]+'></a><div class="media-body fnt-smaller"><a href="#" target="_parent"></a><p style="margin: 0px;"><span>'+JSONObject[0]["bankName"]+'<p style="margin: 0px;">Location\'s phone #: '+JSONObject[0]['nearestBranch']["phone"]+'</p></div><br><br><p style="margin: 0px;">Country Of Birth : '+country[0].value+'</p><p style="margin: 0px;">Pick up State: '+country[1].value+'</p><p style="margin: 0px;">First Name : '+country[2].value+'</p><p style="margin: 0px;">Last Name : '+country[3].value+'</p><p style="margin: 0px;">Cash to Deposites: $ '+JSONObject[0]["payment"]+'</p><p style="margin: 0px;">Status: '+JSONObject[0]["status"]+'</p><p style="margin: 0px;">Deposit Due: 1 hours 59 minutes</p>').insertAfter("#hold_div");*/
-
-          if(Crypto_name == 'DASH')
-          {
-              $('<p>Total Dash: '+JSONObject[0]["total"]+'('+JSONObject[0]["total"]*10000+' dots)</p>').insertAfter("#cancelOrderBtn");
-          }
-          else if(Crypto_name == 'PIVX')
-          {
-              $('<p>Total PIVX: '+JSONObject[0]["total"]+'('+JSONObject[0]["total"]*10000+' uPiv)</p>').insertAfter("#cancelOrderBtn");
-          }
-          else if(Crypto_name == 'BTC')
-          {
-              $('<p>Total BTC: '+JSONObject[0]["total"]+'('+JSONObject[0]["total"]*10000+' bits)</p>').insertAfter("#cancelOrderBtn");
-          }
+          });
 
       })
     </script>

@@ -94,11 +94,10 @@
             }
         }
 
-        /*var phone = localStorage.getItem("phone");
-        $("#signInBtn").append(phone);*/
-
         var testone = localStorage.getItem("test");
         var obj = JSON.parse(testone);
+
+        console.log(testone);
 
         for (var i = 0; i < obj.length; i++) {
             //alert(obj[i].phone);
@@ -127,6 +126,7 @@
                         console.log(testone);
                         var obj = JSON.parse(testone);
                         var number = localStorage.getItem("signInNumber");
+                        var crypto = localStorage.getItem("Crypto");
 
                         for (var i = 0; i < obj.length; i++) {
 

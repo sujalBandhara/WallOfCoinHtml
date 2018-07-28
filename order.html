@@ -26,37 +26,13 @@
                 <a href="javascript: history.go(-1)"><img alt="image" class="img-responsive back-arrow" src="images/back_arrow.png"></a>
             <!--<h4>Buy Dash With Cash</h4>-->
           </div>
-          <!--<h5 style="text-align: center;">Below are offers for $5.0. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>-->
+
             <div class="content" style="margin-top: -20px;" id="offer_div"></div>
 
             <div class="content" style="margin-top: -20px;" id="doubleDeposit_div"></div>
 
             <div class="content" style="margin-top: -20px;" id="multiplebanks_div"></div>
-         <!--<div class="row list-group">
-            <div class="col-sm-12"> 
 
-                &lt;!&ndash; Begin Listing: 609 W GRAVERS LN&ndash;&gt;
-                <div class="list bgc-fff pad-10 box-shad  property-listing">
-                    <div class="media">
-                        <a class="pull-left" href="#" target="_parent">
-                        <img alt="image" class="img-responsive" src="images/bank_images.png"></a>
-
-                        <div class="media-body fnt-smaller">
-                            <a href="#" target="_parent"></a>
-
-                            <p class="media-heading">
-                              <a href="#" target="_parent"><span>D 0.013 </span><small class="pull-right"><button type="button" class="btn btn-success" >ORDER</button></small></a></p>
-
-                              <p style="margin: 0px;">(d 13,318.75)</p>
-                              <p class="media-heading" style="margin: 0px;">
-                                  <a href="#" target="_parent"><span>Wells Fargo</span></a></p>
-                                  <p style="margin: 0px;">2600 EL CAMINO REAL W</p>
-                                  <p style="margin: 0px;">2.2 miles - MOUNTAIN VIEW,CA</p>
-                      </div>
-                    </div>
-                </div>
-            </div>
-            </div>-->
         <button type="button" class="btn hidden" id="getOffersBtn" name="getOffersBtn">GET OFFERS</button>
             <button type="button" class="btn hidden" id="createHoldWithTokenBtn" name="createHoldWithTokenBtn">Create hold</button>
             <button type="button" class="btn hidden" id="getHoldsBtn" name="getHoldsBtn">Hold List</button>
@@ -103,10 +79,6 @@
               }
           }
 
-          /*$('#header').append('<h4>'+Crypto_name+'</h4>');*/
-
-          /*$('<h5 style="text-align: center;">Below are offers for $'+localStorage.getItem("amount")+'. You must click the ORDER button before you receive instructions to pay at the Cash Payment center. </h5>').insertAfter('#header');*/
-
           $("#getOffersBtn").trigger("click");
 
       })
@@ -132,6 +104,50 @@
 
               }
 
+          }
+      }
+
+      function CreateHold(k,length){
+          for(var i=0;i<length;i++)
+          {
+              if(i==k)
+              {
+                  var offer_id = $('#doubleofferId_'+i).val();
+                  localStorage.setItem("Offer",offer_id);
+
+                  var sign_in_number = localStorage.getItem("signInNumber");
+                  var phone_number = localStorage.getItem("phone");
+
+                  if(sign_in_number!=null && sign_in_number == phone_number) {
+                      $('#createHoldWithTokenBtn').trigger('click');
+                  }
+                  else {
+                      location.href = "create-hold-email.html";
+                  }
+
+              }
+
+          }
+      }
+
+      function CreateMultipleHold(k,length){
+          for(var i=0;i<length;i++)
+          {
+              if(i==k)
+              {
+                  var offer_id = $('#doubleofferId_'+i).val();
+                  localStorage.setItem("Offer",offer_id);
+
+                  var sign_in_number = localStorage.getItem("signInNumber");
+                  var phone_number = localStorage.getItem("phone");
+
+                  if(sign_in_number!=null && sign_in_number == phone_number) {
+                      $('#createHoldWithTokenBtn').trigger('click');
+                  }
+                  else {
+                      location.href = "create-hold-email.html";
+                  }
+              }
           }
       }
     </script>
