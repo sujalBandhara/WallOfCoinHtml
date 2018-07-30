@@ -32,9 +32,14 @@
         </div>
 
         <div class="content" style="margin-top: 120px; height: 500px;">
+            <p id="crypt_name"><strong>example Address</strong></p>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Crypto Address" id="cryptoAddress" name="cryptoAddress">
+            </div>
+
             <p><strong>Choose Crypto Currency..</strong></p>
             <div class="form-group">
-                <select id="crypto" class="form-control" name="crypto">
+                <select id="crypto" class="form-control" name="crypto" onchange="getCryptoAddress()">
                     <option value="">Select Crypto..</option>
                 </select>
             </div>
@@ -69,7 +74,24 @@
     $(document).ready(function () {
 
         $('#getCryptosBtn').trigger('click');
+
     });
+
+    function getCryptoAddress(){
+        var conceptName = $('#crypto :selected').val();
+
+        var details = JSON.parse(localStorage.getItem("CryptoDetails"));
+        console.log(details.length);
+
+        for(var i = 0; i < details.length; i++){
+            if(details[i].code == conceptName){
+                var cryptoAddress = details[i].exampleAddress;
+                $('#cryptoAddress').val(cryptoAddress);
+                /*$('<p>'+details[i].name+'</p>').insertBefore('#crypt_name');*/
+                localStorage.setItem("cryptoAddress",cryptoAddress);
+            }
+        }
+    }
 
     $('#homeBtn').on('click',function () {
 
